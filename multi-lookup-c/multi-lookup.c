@@ -1,7 +1,7 @@
 /*
  * File: multi-lookup.c
  * Author: Josiah Lawrence
- * Project: CSCI 3753 Programming Assignment 2
+ * Project: CSCI 440 Final
  * Create Date: 2026/04/15
  * Modify Date: 2026/04/26
  * Description:
@@ -120,6 +120,11 @@ main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
+  /* Start timer */
+  struct timeval begin, end;
+  gettimeofday(&begin, 0);
+
+
   /* Open the input files and */
   /* create array of file pointers */
   num_files = 0;
@@ -181,9 +186,15 @@ main(int argc, char* argv[])
     pthread_join(resolver_threads[i], NULL);
   }
 
+  
   pthread_cond_destroy(&queue_not_empty);
   pthread_cond_destroy(&queue_not_full);
-
+  
+  /* Stop timer and print elapsed time */
+  gettimeofday(&end, 0);
+  long seconds = end.tv_sec - begin.tv_sec;
+  long microseconds = end.tv_usec - begin.tv_usec;
+  printf("%ld\n", seconds * 1000000 + microseconds);
   /* Close Output File */
   fclose(output_file);
 

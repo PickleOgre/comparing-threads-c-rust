@@ -1,8 +1,9 @@
 /*
- * Name: multi-lookup
+ * Name: multi-lookup-rust
  * Author: Josiah Lawrence
- * Project: CSCI 3753 DNS Resolver in Rust Threaded
+ * Project: CSCI 440 Final
  * Create Date: 2026/04/15
+ * Modify Date: 2026/04/26
  * Description:
  * 	This is a threaded implementation of a
  *  bulk DNS lookup program.
@@ -56,6 +57,8 @@ fn main() {
 
     let (sender, receiver) = bounded::<String>(QUEUE_SIZE);
 
+    let start = std::time::Instant::now(); // Start timer
+
     // Spawn resolver threads
     let mut resolver_handles: Vec<JoinHandle<()>> = Vec::new();
 
@@ -87,6 +90,7 @@ fn main() {
         });
         resolver_handles.push(handle);
     }
+
 
     // Spawn requester threads
     let mut requester_handles: Vec<JoinHandle<()>> = Vec::new();
@@ -140,6 +144,10 @@ fn main() {
     for handle in resolver_handles {
         handle.join().unwrap();
     }
+
+    /* Measure elapsed time and print */
+    let elapsed = start.elapsed();
+    println!("{}", elapsed.as_micros());
 
     output.lock().unwrap().flush().unwrap();
 }

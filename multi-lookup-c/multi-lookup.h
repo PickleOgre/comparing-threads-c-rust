@@ -1,11 +1,12 @@
 /*
  * File: multi-lookup.c
  * Author: Josiah Lawrence
- * Project: CSCI 3753 Programming Assignment 2
+ * Project: CSCI 440 Final
  * Create Date: 2026/04/15
+ * Modify Date: 2026/04/26
  * Description:
- * 	This is the header file for the threaded
- *      solution to this assignment.
+ *  This is a threaded implementation of a
+ *  bulk DNS lookup program.
  *
  */
 
@@ -19,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 

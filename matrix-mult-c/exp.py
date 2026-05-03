@@ -1,6 +1,9 @@
-import subprocess, statistics, csv
+import os, subprocess, statistics, csv
 
 program = "./matrix-mult"
+if not os.path.exists(program):
+    subprocess.run(["make"], check=True)
+
 sizes = [100, 250, 500, 750, 1000, 1500, 2000]
 runs = 20
 

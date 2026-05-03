@@ -1,6 +1,8 @@
-import subprocess, statistics, csv
+import os, subprocess, statistics, csv
 
-program = "./monte-carlo"
+program = "./target/release/monte-carlo-rust"
+if not os.path.exists(program):
+    subprocess.run(["cargo", "build", "--release"], check=True)
 sizes = [100, 250, 500, 750, 1000, 1500, 2000, 5000, 10000, 20000]
 runs = 20
 

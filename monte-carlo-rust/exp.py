@@ -1,17 +1,35 @@
-import os, subprocess, statistics, csv
+import os, subprocess, statistics, csv, math
 
-program = "./target/release/monte-carlo-rust"
-if not os.path.exists(program):
+ERR_THRESHOLD = 0.05
+PROGRAM = "./target/release/monte-carlo-rust"
+SIZES = [10000000, 50000000, 100000000, 500000000]
+ZC = 1.96
+DEBUG = True
+
+def findError(zc, std, n):
+  return (zc * std) / math.sqrt(n)
+
+if not os.path.exists(PROGRAM):
     subprocess.run(["cargo", "build", "--release"], check=True)
-sizes = [100, 250, 500, 750, 1000, 1500, 2000, 5000, 10000, 20000]
-runs = 20
+
+i = 0
+while i < 3:
+    subprocess.run([PROGRAM, str(SIZES[0])], capture_output=True, text=True) # Warmup
+    i+=1
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["N", "mean_µs", "min_µs", "max_µs"])
-    for n in sizes:
+    writer.writerow(["N", "time_µs"])
+    if DEBUG: print("size\tn\tmean\tstdev\tME")
+    for s in SIZES:
         times = []
-        for _ in range(runs):
-            out = subprocess.run([program, str(n)], capture_output=True, text=True)
-            times.append(int(out.stdout.strip()))
-        writer.writerow([n, statistics.mean(times), min(times), max(times)])
+        n = 0
+        while n < 3 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
+            out = subprocess.run([PROGRAM, str(s)], capture_output=True, text=True)
+            time = int(out.stdout.strip())
+            writer.writerow([s, time])
+            times.append(time)
+            n+=1
+        if DEBUG:
+            stdev = statistics.stdev(times)
+            print(str(s) + "\t" + str(n) + "\t" + str(statistics.mean(times)) + "\t" + str(stdev) + "\t" + str(findError(ZC, stdev, n)))

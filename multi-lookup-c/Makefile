@@ -6,7 +6,7 @@ LFLAGS = -O2 -Wall -Wextra -pthread
 
 all: lookup queueTest pthread-hello multi-lookup
 
-multi-lookup: multi-lookup.o queue.o util.o
+multi-lookup: multi-lookup.o queue.o
 	$(CC) $(LFLAGS) $^ -o $@
 
 lookup: lookup.o queue.o util.o
@@ -40,4 +40,4 @@ clean:
 	rm -f lookup queueTest pthread-hello multi-lookup
 	rm -f *.o
 	rm -f *~
-	rm -f output.txt results.csv
+	rm -f results.txt results.csv

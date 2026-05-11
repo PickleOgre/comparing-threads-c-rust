@@ -1,19 +1,37 @@
-import os, subprocess, statistics, csv
+import os, subprocess, statistics, csv, math
 
-program = "./multi-lookup"
-if not os.path.exists(program):
+ERR_THRESHOLD = 0.1
+PROGRAM = "./multi-lookup"
+SIZES = [100, 250, 500]
+ZC = 1.96
+DEBUG = True
+
+def findError(zc, std, n):
+  return (zc * std) / math.sqrt(n)
+
+if not os.path.exists(PROGRAM):
     subprocess.run(["make"], check=True)
-sizes = [100, 250, 500, 750, 1000, 1500, 2000]
-runs = 1
+
+i = 0
+while i < 3:
+    subprocess.run([PROGRAM, str(SIZES[0]), "results.txt"], capture_output=True, text=True) # Warmup
+    i+=1
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["N", "mean_µs", "min_µs", "max_µs"])
-
-    for n in sizes:
+    writer.writerow(["N", "time_µs"])
+    if DEBUG: print("size\tn\tmean\tstdev\tME")
+    for s in SIZES:
         times = []
-        input_arg = "input/" + str(n) + "names.txt"
-        for _ in range(runs):
-            out = subprocess.run([program, input_arg, "output.txt"], capture_output=True, text=True)
-            times.append(int(out.stdout.strip()))
-        writer.writerow([n, statistics.mean(times), min(times), max(times)])
+        input_arg = "input/" + str(s) + "names.txt"
+        n = 0
+        while n < 10 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
+            out = subprocess.run([PROGRAM, input_arg, "results.txt"], capture_output=True, text=True)
+            time = int(out.stdout.strip())
+            writer.writerow([s, time])
+            times.append(time)
+            n+=1
+            # if n >= 50: break
+        if DEBUG:
+            stdev = statistics.stdev(times)
+            print(str(s) + "\t" + str(n) + "\t" + str(statistics.mean(times)) + "\t" + str(stdev) + "\t" + str(findError(ZC, stdev, n)))

@@ -69,9 +69,19 @@ resolve_thr(void* arg)
     pthread_mutex_unlock(args->queue_lock);
 
     /* Lookup hostname and get IP string */
-    if (dnslookup(hostname, firstipstr, sizeof(firstipstr)) == UTIL_FAILURE) {
+    firstipstr[0] = '\0';
+    struct addrinfo hints;
+    struct addrinfo* res;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_INET;
+    if (getaddrinfo(hostname, NULL, &hints, &res) == 0) {
+      inet_ntop(AF_INET,
+                &((struct sockaddr_in*)res->ai_addr)->sin_addr,
+                firstipstr,
+                sizeof(firstipstr));
+      freeaddrinfo(res);
+    } else {
       fprintf(stderr, "dnslookup error: %s\n", hostname);
-      strncpy(firstipstr, "", sizeof(firstipstr));
     }
 
     /* Write to Output File */

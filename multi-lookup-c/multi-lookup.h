@@ -14,7 +14,6 @@
 #define MULTI_LOOKUP_H
 
 #include "queue.h"
-#include "util.h"
 #include <errno.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -23,6 +22,11 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
 #define MINARGS 3
 #define USAGE "<inputFilePath> <outputFilePath>"

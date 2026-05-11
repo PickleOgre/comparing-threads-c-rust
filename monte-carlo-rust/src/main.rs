@@ -10,7 +10,7 @@
  *
  */
 
-use rand::Rng;
+use rand::{rngs::SmallRng, SeedableRng, Rng};
 use std::env;
 use std::thread::{self, JoinHandle};
 
@@ -49,7 +49,7 @@ fn main() {
 
         let handle = thread::spawn(move || {
             let mut hits: u64 = 0;
-            let mut rng = rand::thread_rng();
+            let mut rng = SmallRng::seed_from_u64((t + 1) as u64);
 
             for _ in 0..n_samples {
                 let x: f64 = rng.r#gen::<f64>(); 

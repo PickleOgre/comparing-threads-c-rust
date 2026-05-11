@@ -12,10 +12,8 @@ def findError(zc, std, n):
 if not os.path.exists(PROGRAM):
     subprocess.run(["make"], check=True)
 
-i = 0
-while i < 3:
-    subprocess.run([PROGRAM, str(SIZES[0]), "results.txt"], capture_output=True, text=True) # Warmup
-    i+=1
+for size in SIZES: # Warmup cache
+    subprocess.run([PROGRAM, str(size), "results.txt"], capture_output=True, text=True)
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)

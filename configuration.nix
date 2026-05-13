@@ -91,8 +91,7 @@
     settings = {
       server = {
        prefetch = true;
-       cache-min-ttl = 300;
-       cache-max-ttl = 86400;
+       cache-min-ttl = 86400;
        serve-expired = true;
        num-threads = 2;
       };

@@ -23,13 +23,13 @@ with open("results.csv", "w", newline="") as file:
         times = []
         input_arg = "input/" + str(s) + "names.txt"
         n = 0
-        while n < 10 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
+        while n < 100 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
             out = subprocess.run([PROGRAM, input_arg, "results.txt"], capture_output=True, text=True)
             time = int(out.stdout.strip())
             writer.writerow([s, time])
             times.append(time)
             n+=1
-            # if n >= 50: break
+            if n >= 1000: break
         if DEBUG:
             stdev = statistics.stdev(times)
             print(str(s) + "\t" + str(n) + "\t" + str(statistics.mean(times)) + "\t" + str(stdev) + "\t" + str(findError(ZC, stdev, n)))

@@ -97,6 +97,7 @@
        cache-min-ttl = 300;
        cache-max-ttl = 86400;
        serve-expired = true;
+       num-threads = 2;
       };
     };
   };

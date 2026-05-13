@@ -85,9 +85,6 @@
 
   # List services that you want to enable:
 
-  # Udisksctl service
-  services.udisks2.enable = true;
-
   # Unbound local DNS resolver
   services.unbound = {
     enable = true;

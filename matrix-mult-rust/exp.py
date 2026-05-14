@@ -19,7 +19,7 @@ while i < 3:
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["N", "time_µs"])
+    writer.writerow(["size", "time_µs"])
     if DEBUG: print("size\tn\tmean\tstdev\tME")
     for s in SIZES:
         times = []

@@ -15,12 +15,12 @@ if not os.path.exists(PROGRAM):
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["N", "time_µs"])
+    writer.writerow(["size", "time_µs"])
     if DEBUG: print("size\tn\tmean\tstdev\tME")
     for s in SIZES:
         i = 0
         while i < WARMUP_RUNS: # Warmup cache
-            subprocess.run([PROGRAM, str(size), "results.txt"], capture_output=True, text=True)
+            subprocess.run([PROGRAM, str(s), "results.txt"], capture_output=True, text=True)
             i+= 1
         times = []
         input_arg = "input/" + str(s) + "names.txt"

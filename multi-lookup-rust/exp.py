@@ -25,7 +25,7 @@ with open("results.csv", "w", newline="") as file:
         times = []
         input_arg = "input/" + str(s) + "names.txt"
         n = 0
-        while n < 100 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
+        while n < 10 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
             out = subprocess.run([PROGRAM, input_arg, "results.txt"], capture_output=True, text=True)
             time = int(out.stdout.strip())
             writer.writerow([s, time])

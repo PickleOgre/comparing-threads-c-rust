@@ -4,7 +4,7 @@ ERR_THRESHOLD = 0.05
 PROGRAM = "./matrix-mult"
 SIZES = [100, 250, 500, 750, 1000, 1500, 2000]
 ZC = 1.96
-DEBUG = True
+DEBUG = False
 
 def findError(zc, std, n):
   return (zc * std) / math.sqrt(n)

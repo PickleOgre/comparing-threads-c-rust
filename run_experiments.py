@@ -21,10 +21,10 @@ if len(sys.argv) > 1:
 
 # Experiment Directory Paths
 programs = [
-  "matrix-mult-c",
-  "matrix-mult-rust",
-  "monte-carlo-c",
-  "monte-carlo-rust",
+  #"matrix-mult-c",
+  #"matrix-mult-rust",
+  #"monte-carlo-c",
+  #"monte-carlo-rust",
   "multi-lookup-c",
   "multi-lookup-rust"
 ]

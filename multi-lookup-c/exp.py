@@ -5,21 +5,23 @@ PROGRAM = "./multi-lookup"
 SIZES = [100, 250, 500]
 ZC = 1.96
 DEBUG = True
+WARMUP_RUNS = 16
 
 def findError(zc, std, n):
   return (zc * std) / math.sqrt(n)
 
 if not os.path.exists(PROGRAM):
-    subprocess.run(["make"], check=True)
-
-for size in SIZES: # Warmup cache
-    subprocess.run([PROGRAM, str(size), "results.txt"], capture_output=True, text=True)
+    subprocess.run(["make"], check=True)    
 
 with open("results.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["N", "time_µs"])
     if DEBUG: print("size\tn\tmean\tstdev\tME")
     for s in SIZES:
+        i = 0
+        while i < WARMUP_RUNS: # Warmup cache
+            subprocess.run([PROGRAM, str(size), "results.txt"], capture_output=True, text=True)
+            i+= 1
         times = []
         input_arg = "input/" + str(s) + "names.txt"
         n = 0

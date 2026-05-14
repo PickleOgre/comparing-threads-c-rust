@@ -48,16 +48,18 @@ if mode in ["all", "graph"]:
   for p in programs:
     print(p)
     df = pd.read_csv("./"+p+"/results.csv")
-    grouped = [group["time_µs"].values for _, group in df.groupby("N")]
-    labels = df["N"].unique()
-    print(df.groupby("N")["time_µs"].std())
+    grouped = [group["time_µs"].values for _, group in df.groupby("size")]
+    labels = df["size"].unique()
+    print(df.groupby("size")["time_µs"].agg(["mean", "std"]))
 
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.boxplot(grouped, tick_labels=labels)
-    ax.set_xlabel("N")
+    ax.set_xlabel("size")
     ax.set_ylabel("Execution time (µs)")
-    if "multi-lookup" in p:
-      ax.set_yscale("log")
 
     plt.tight_layout()
     plt.savefig(p+"-plot.png")
+
+    ax.set_yscale("log")
+    plt.savefig(p+"-plot-log.png")
+

@@ -56,6 +56,8 @@ if mode in ["all", "graph"]:
     ax.boxplot(grouped, tick_labels=labels)
     ax.set_xlabel("N")
     ax.set_ylabel("Execution time (µs)")
+    if "multi-lookup" in p:
+      ax.set_yscale("log")
 
     plt.tight_layout()
     plt.savefig(p+"-plot.png")

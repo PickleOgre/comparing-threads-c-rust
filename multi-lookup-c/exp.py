@@ -18,12 +18,12 @@ with open("results.csv", "w", newline="") as file:
     writer.writerow(["N", "time_µs"])
     if DEBUG: print("size\tn\tmean\tstdev\tME")
     for s in SIZES:
+        input_arg = "input/" + str(s) + "names.txt"
         i = 0
         while i < WARMUP_RUNS: # Warmup cache
-            subprocess.run([PROGRAM, str(size), "results.txt"], capture_output=True, text=True)
+            subprocess.run([PROGRAM, input_arg, "results.txt"], capture_output=True, text=True)
             i+= 1
         times = []
-        input_arg = "input/" + str(s) + "names.txt"
         n = 0
         while n < 100 or findError(ZC, statistics.stdev(times), n) > ERR_THRESHOLD * statistics.mean(times):
             out = subprocess.run([PROGRAM, input_arg, "results.txt"], capture_output=True, text=True)
